@@ -1,0 +1,73 @@
+package main
+
+import (
+	"fmt"
+	"strings"
+)
+
+type Metrics struct {
+	DeviceModel string
+	CPUModel    string
+	Governor    string
+	EnergyBias  string
+	AvgFreq     string
+	CPUStatus   string
+	Throttle    ThrottleInfo
+	FanStatus   string
+	SensorsHint bool
+}
+
+func display(m Metrics) {
+	var b strings.Builder
+	b.Grow(1024)
+
+	b.WriteString("\033[H\033[2J\033[3J")
+
+	b.WriteString("=== System Information ===\n")
+	fmt.Fprintf(&b, "Device: %s\n", m.DeviceModel)
+	fmt.Fprintf(&b, "CPU: %s\n\n", m.CPUModel)
+
+	if m.Governor != "N/A" || m.AvgFreq != "N/A" {
+		b.WriteString("=== CPU Performance ===\n")
+		if m.Governor != "N/A" {
+			fmt.Fprintf(&b, "Governor: %s\n", m.Governor)
+		}
+		if m.EnergyBias != "N/A" {
+			fmt.Fprintf(&b, "Energy Bias: %s\n", m.EnergyBias)
+		}
+		if m.AvgFreq != "N/A" {
+			fmt.Fprintf(&b, "Current Freq (AVG): %s\n", m.AvgFreq)
+		}
+		b.WriteByte('\n')
+	}
+
+	if m.CPUStatus != "" {
+		b.WriteString("=== CPU Status ===\n")
+		b.WriteString(m.CPUStatus)
+		b.WriteString("\n\n")
+	}
+
+	if m.Throttle.Available {
+		b.WriteString("=== Thermal Throttling Details ===\n")
+		fmt.Fprintf(&b, "Package Throttle Events: %s\n", m.Throttle.PackageCount)
+		fmt.Fprintf(&b, "Package Total Throttle Time: %s\n", m.Throttle.PackageTotalTime)
+		fmt.Fprintf(&b, "Package Max Throttle Event: %s\n", m.Throttle.PackageMaxTime)
+		fmt.Fprintf(&b, "Core Throttle Events: %s\n", m.Throttle.CoreCount)
+		fmt.Fprintf(&b, "Core Total Throttle Time: %s\n", m.Throttle.CoreTotalTime)
+		fmt.Fprintf(&b, "Core Max Throttle Event: %s\n\n", m.Throttle.CoreMaxTime)
+	}
+
+	if m.FanStatus != "" {
+		b.WriteString("=== Fan Status ===\n")
+		b.WriteString(m.FanStatus)
+		b.WriteString("\n\n")
+	}
+
+	if m.SensorsHint {
+		b.WriteString("Hint: Install lm-sensors for better thermal data: sudo apt install lm-sensors\n")
+	}
+
+	fmt.Fprintf(&b, "Refreshing every %v... (Press Ctrl+C to exit)\n", refreshInterval)
+
+	fmt.Print(b.String())
+}

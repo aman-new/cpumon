@@ -48,4 +48,4 @@ sudo sensors-detect
 
 ## License
 
-Do whatever you want with it.
+MIT

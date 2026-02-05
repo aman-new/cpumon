@@ -4,20 +4,25 @@ Real-time CPU monitoring for Linux. Shows temperatures, frequencies, throttling,
 
 ## Install
 
+**Pre-built binary:**
+
+```
+curl -Lo cpumon https://github.com/Mohabdo21/cpumon/releases/latest/download/cpumon-linux-amd64
+chmod +x cpumon
+sudo mv cpumon /usr/local/bin/
+```
+
+**With Go:**
+
 ```
 go install github.com/Mohabdo21/cpumon@latest
 ```
 
-Or build from source:
-
-```
-make build
-```
-
-For smaller binary:
+**From source:**
 
 ```
 make build-optimized
+sudo make install
 ```
 
 ## Run

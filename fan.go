@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"path/filepath"
-	"strconv"
 	"strings"
 )
 
@@ -64,13 +63,8 @@ func readHwmonFan(fr FileReader, fanFiles []string, lineBuf *[]string) (string, 
 	lines := (*lineBuf)[:0]
 
 	for _, f := range fanFiles {
-		rpm, err := fr.Read(f)
-		if err != nil {
-			continue
-		}
-
-		rpmVal, err := strconv.ParseInt(rpm, 10, 64)
-		if err != nil {
+		rpmVal, ok := readInt(fr, f)
+		if !ok {
 			continue
 		}
 

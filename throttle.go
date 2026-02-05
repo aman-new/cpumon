@@ -33,38 +33,24 @@ func readThrottleInfo(fr FileReader) ThrottleInfo {
 }
 
 func readCount(fr FileReader, path string) string {
-	raw, err := fr.Read(path)
-	if err != nil || raw == "" {
-		return "N/A"
+	if v, ok := readInt(fr, path); ok {
+		return strconv.FormatInt(v, 10)
 	}
-	if _, err := strconv.ParseInt(raw, 10, 64); err != nil {
-		return "N/A"
-	}
-	return raw
+	return "N/A"
 }
 
 func readMs(fr FileReader, path string) string {
-	raw, err := fr.Read(path)
-	if err != nil || raw == "" {
-		return "N/A"
+	if v, ok := readInt(fr, path); ok {
+		return fmt.Sprintf("%d ms", v)
 	}
-	ms, err := strconv.ParseInt(raw, 10, 64)
-	if err != nil {
-		return "N/A"
-	}
-	return fmt.Sprintf("%d ms", ms)
+	return "N/A"
 }
 
 func readDuration(fr FileReader, path string) string {
-	raw, err := fr.Read(path)
-	if err != nil || raw == "" {
-		return "N/A"
+	if v, ok := readInt(fr, path); ok {
+		return formatDuration(v)
 	}
-	ms, err := strconv.ParseInt(raw, 10, 64)
-	if err != nil {
-		return "N/A"
-	}
-	return formatDuration(ms)
+	return "N/A"
 }
 
 func formatDuration(ms int64) string {

@@ -59,8 +59,8 @@ func (m *Monitor) collect() Metrics {
 	return Metrics{
 		DeviceModel: m.deviceModel,
 		CPUModel:    m.cpuModel,
-		Governor:    readGovernor(m.fr),
-		EnergyBias:  readEnergyBias(m.fr),
+		Governor:    readOrNA(m.fr, cpuGovernorPath),
+		EnergyBias:  readOrNA(m.fr, cpuEnergyBiasPath),
 		AvgFreq:     avgFreq,
 		CPUStatus:   cpuStatus,
 		Throttle:    readThrottleInfo(m.fr),

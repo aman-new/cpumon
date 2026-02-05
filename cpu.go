@@ -59,20 +59,11 @@ func discoverHwmonCPU(fr FileReader) string {
 	return ""
 }
 
-func readGovernor(fr FileReader) string {
-	gov, err := fr.Read(cpuGovernorPath)
-	if err != nil {
-		return "N/A"
+func readOrNA(fr FileReader, path string) string {
+	if s, err := fr.Read(path); err == nil {
+		return s
 	}
-	return gov
-}
-
-func readEnergyBias(fr FileReader) string {
-	bias, err := fr.Read(cpuEnergyBiasPath)
-	if err != nil {
-		return "N/A"
-	}
-	return bias
+	return "N/A"
 }
 
 func readFrequencies(fr FileReader, infos []CPUFreqInfo, coreFreqs map[int]string) string {
@@ -85,13 +76,8 @@ func readFrequencies(fr FileReader, infos []CPUFreqInfo, coreFreqs map[int]strin
 
 	var total, count int64
 	for _, info := range infos {
-		raw, err := fr.Read(info.Path)
-		if err != nil {
-			continue
-		}
-
-		kHz, err := strconv.ParseInt(raw, 10, 64)
-		if err != nil || kHz <= 0 {
+		kHz, ok := readInt(fr, info.Path)
+		if !ok || kHz <= 0 {
 			continue
 		}
 
@@ -175,13 +161,8 @@ func readThermalFromHwmon(fr FileReader, temps []string, coreFreqs map[int]strin
 
 	lines := (*lineBuf)[:0]
 	for _, temp := range temps {
-		raw, err := fr.Read(temp)
-		if err != nil {
-			continue
-		}
-
-		milli, err := strconv.ParseInt(raw, 10, 64)
-		if err != nil {
+		milli, ok := readInt(fr, temp)
+		if !ok {
 			continue
 		}
 		tempC := float64(milli) / 1000.0
@@ -193,14 +174,10 @@ func readThermalFromHwmon(fr FileReader, temps []string, coreFreqs map[int]strin
 		}
 
 		info := fmt.Sprintf("+%.1f°C", tempC)
-		if crit, err := fr.Read(strings.Replace(temp, "_input", "_crit", 1)); err == nil {
-			if m, _ := strconv.ParseInt(crit, 10, 64); m > 0 {
-				info += fmt.Sprintf("  (crit = +%.1f°C)", float64(m)/1000.0)
-			}
-		} else if max, err := fr.Read(strings.Replace(temp, "_input", "_max", 1)); err == nil {
-			if m, _ := strconv.ParseInt(max, 10, 64); m > 0 {
-				info += fmt.Sprintf("  (high = +%.1f°C)", float64(m)/1000.0)
-			}
+		if m, ok := readInt(fr, strings.Replace(temp, "_input", "_crit", 1)); ok && m > 0 {
+			info += fmt.Sprintf("  (crit = +%.1f°C)", float64(m)/1000.0)
+		} else if m, ok := readInt(fr, strings.Replace(temp, "_input", "_max", 1)); ok && m > 0 {
+			info += fmt.Sprintf("  (high = +%.1f°C)", float64(m)/1000.0)
 		}
 
 		if m := coreNumRe.FindStringSubmatch(label); m != nil {

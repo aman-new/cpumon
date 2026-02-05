@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -75,4 +76,13 @@ func (sysCmdRunner) Run(name string, args ...string) (string, error) {
 func fileExists(path string) bool {
 	_, err := os.Stat(path)
 	return err == nil
+}
+
+func readInt(fr FileReader, path string) (int64, bool) {
+	raw, err := fr.Read(path)
+	if err != nil || raw == "" {
+		return 0, false
+	}
+	v, err := strconv.ParseInt(raw, 10, 64)
+	return v, err == nil
 }

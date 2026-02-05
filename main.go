@@ -17,7 +17,11 @@ func main() {
 		os.Exit(1)
 	}
 
-	m := NewMonitor()
+	m, err := NewMonitor()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(1)
+	}
 	if err := m.Run(context.Background(), *interval); err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)

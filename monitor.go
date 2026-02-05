@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"os/signal"
+	"strings"
 	"sync"
 	"syscall"
 	"time"
@@ -17,7 +18,6 @@ type Monitor struct {
 	cpuModel    string
 	deviceModel string
 	cpuFreqs    []CPUFreqInfo
-	hwmonPath   string
 	hwmonTemps  []HwmonTemp
 	fanFiles    []string
 	thinkpadFan bool
@@ -28,28 +28,51 @@ type Monitor struct {
 	lineBuf     []string
 }
 
-func NewMonitor() *Monitor {
+func NewMonitor() (*Monitor, error) {
 	fr := sysFileReader{}
 	cr := sysCmdRunner{}
 
-	_, sensorsErr := exec.LookPath("sensors")
 	hwmonPath := discoverHwmonCPU(fr)
+	cpuFreqs := discoverCPUTopology(fr)
+	hwmonTemps := discoverHwmonTemps(hwmonPath)
+	fanFiles := discoverFanFiles()
+	thinkpadFan := fileExists(thinkpadFanPath)
+	throttleOK := fileExists(cpuThrottlePath)
 
-	return &Monitor{
+	sensorsOK := false
+	if _, err := exec.LookPath("sensors"); err == nil {
+		if out, err := cr.Run("sensors"); err == nil && len(out) > 0 {
+			sensorsOK = strings.Contains(out, "Package id") ||
+				strings.Contains(out, "Core ") ||
+				strings.Contains(out, "Tctl:") ||
+				strings.Contains(out, "Tdie:")
+		}
+	}
+
+	m := &Monitor{
 		fr:          fr,
 		cr:          cr,
 		cpuModel:    readCPUModel(fr),
 		deviceModel: readDeviceModel(fr),
-		cpuFreqs:    discoverCPUTopology(fr),
-		hwmonPath:   hwmonPath,
-		hwmonTemps:  discoverHwmonTemps(hwmonPath),
-		fanFiles:    discoverFanFiles(),
-		thinkpadFan: fileExists(thinkpadFanPath),
-		sensorsOK:   sensorsErr == nil,
-		throttleOK:  fileExists(cpuThrottlePath),
+		cpuFreqs:    cpuFreqs,
+		hwmonTemps:  hwmonTemps,
+		fanFiles:    fanFiles,
+		thinkpadFan: thinkpadFan,
+		sensorsOK:   sensorsOK,
+		throttleOK:  throttleOK,
 		coreFreqBuf: make(map[int]string, 32),
 		lineBuf:     make([]string, 0, 32),
 	}
+
+	hasFreq := len(cpuFreqs) > 0
+	hasThermal := sensorsOK || len(hwmonTemps) > 0
+	hasFan := thinkpadFan || len(fanFiles) > 0
+
+	if !hasFreq && !hasThermal && !hasFan && !throttleOK {
+		return nil, ErrNoMonitorData
+	}
+
+	return m, nil
 }
 
 func (m *Monitor) collect() Metrics {

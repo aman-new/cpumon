@@ -29,6 +29,7 @@ const (
 var (
 	ErrNoThermalData = errors.New("no thermal data")
 	ErrNoFanData     = errors.New("no fan interface")
+	ErrNoMonitorData = errors.New("no monitoring data available (VM or container environment?)")
 )
 
 var (

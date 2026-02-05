@@ -28,7 +28,9 @@ sudo make install
 ## Run
 
 ```
-./build/cpumon
+cpumon           # 1 second refresh (default)
+cpumon -i 500ms  # 500ms refresh
+cpumon -i 2s     # 2 second refresh
 ```
 
 Requires root for some metrics. Install `lm-sensors` for better thermal data:

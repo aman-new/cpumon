@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strings"
+	"time"
 )
 
 type Metrics struct {
@@ -17,7 +18,7 @@ type Metrics struct {
 	SensorsHint bool
 }
 
-func display(m Metrics) {
+func display(m Metrics, interval time.Duration) {
 	var b strings.Builder
 	b.Grow(1024)
 
@@ -64,10 +65,10 @@ func display(m Metrics) {
 	}
 
 	if m.SensorsHint {
-		b.WriteString("Hint: Install lm-sensors for better thermal data: sudo apt install lm-sensors\n")
+		b.WriteString("Hint: Install lm-sensors for better thermal data: sudo dnf install lm_sensors\n")
 	}
 
-	fmt.Fprintf(&b, "Refreshing every %v... (Press Ctrl+C to exit)\n", refreshInterval)
+	fmt.Fprintf(&b, "Refreshing every %v... (Press Ctrl+C to exit)\n", interval)
 
 	fmt.Print(b.String())
 }

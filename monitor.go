@@ -69,7 +69,7 @@ func (m *Monitor) collect() Metrics {
 	}
 }
 
-func (m *Monitor) Run(ctx context.Context) error {
+func (m *Monitor) Run(ctx context.Context, interval time.Duration) error {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
@@ -86,10 +86,10 @@ func (m *Monitor) Run(ctx context.Context) error {
 		}
 	})
 
-	ticker := time.NewTicker(refreshInterval)
+	ticker := time.NewTicker(interval)
 	defer ticker.Stop()
 
-	display(m.collect())
+	display(m.collect(), interval)
 
 	for {
 		select {
@@ -98,7 +98,7 @@ func (m *Monitor) Run(ctx context.Context) error {
 			wg.Wait()
 			return nil
 		case <-ticker.C:
-			display(m.collect())
+			display(m.collect(), interval)
 		}
 	}
 }

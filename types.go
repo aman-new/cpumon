@@ -6,12 +6,9 @@ import (
 	"os/exec"
 	"regexp"
 	"strings"
-	"time"
 )
 
 const (
-	refreshInterval = time.Second
-
 	cpuGovernorPath   = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"
 	cpuEnergyBiasPath = "/sys/devices/system/cpu/cpu0/cpufreq/energy_performance_preference"
 	cpuThrottlePath   = "/sys/devices/system/cpu/cpu0/thermal_throttle/package_throttle_count"

